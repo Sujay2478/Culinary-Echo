@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Recipe Voice Assistant</title>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://unpkg.com/aframe-event-set-component@3.0.3/dist/aframe-event-set-component.min.js"></script>
+  <script type="module" src="script.js"></script>
+  <script type="module" src="voiceCommands.js"></script>
+  <script>
+    AFRAME.registerComponent('button', {
+      schema: {
+        color: {default: '#003865'},
+        hover: {default: '#005C8A'},
+        click: {default: '#951272'},
+        item_id: {default: '0'},
+        item_name: {default: ''},
+      },
+
+      init: function () {
+        var data = this.data;
+        var element = this.el;
+
+        if (data.item_name != '') {
+          element.setAttribute('text', 'value: ' + data.item_name);
+        }
+        
+        element.addEventListener('mouseenter', function () {
+          element.setAttribute('color', data.hover);
+        });
+
+        element.addEventListener('mouseleave', function () {
+          element.setAttribute('color', data.color);
+        });
+        
+        element.addEventListener('click', function () {
+          element.setAttribute('color', data.click);
+          document.querySelector('#info_text').setAttribute('value', "Your Recipe\n");
+          document.querySelector('#info_price').setAttribute('value', "0.00");
+          // This is where you will integrate the interaction with the script.js logic
+        });
+      }
+    });
+  </script>
+</head>
+<body>    
+  <a-scene>
+    <a-assets>
+      <a-mixin id="menu-item" geometry="width: 2; height: 0.6;" material="color: #5C4033; hover: #D52E22; shader: flat;" text="align: center; anchor: center; baseline: center; color: white; wrap-count: 17;" ></a-mixin>
+    </a-assets>
+    
+    <a-entity camera look-controls position="0 1.6 0">
+      <a-entity
+        cursor="fuse: true; fuseTimeout: 600"
+        position="0 0 -1"
+        geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.035"
+        material="color: black; shader: flat; opacity: 0.5;"></a-entity>
+      <a-text id="hud_total" value="0 items" position="0 -0.2 -2" scale="0.3 0.3" color="white" align="center" ></a-text>
+    </a-entity>
+    <a-text value="Culinary Echo" position="-0.3 3.5 -3" scale="2 2 2" color="#F2A365" align="center"
+            font="https://cdn.aframe.io/fonts/Exo2Bold.fnt" wrap-count="35"></a-text>
+    
+    <a-entity position="-2.0 1.0 -3" rotation="0 20 0">
+      <!-- Example ingredient buttons -->
+      <a-plane mixin="menu-item" position="-1.1 2.2 -2" button="item_id: 1; item_name: Flour; "></a-plane>
+      <a-plane mixin="menu-item" position=" 1.1 2.2 -2" button="item_id: 2; item_name: Sugar;"></a-plane>
+      <a-plane mixin="menu-item" position=" 1.1 1.5 -2" button="item_id: 2; item_name: Chocolate Chips;"></a-plane>
+      <a-plane mixin="menu-item" position=" 1.1 0.8 -2" button="item_id: 2; item_name: Vanilla Extract;"></a-plane>
+      <a-plane mixin="menu-item" position="-1.1 1.5 -2" button="item_id: 3; item_name: Eggs;"></a-plane>
+      <a-plane mixin="menu-item" position="-1.1 0.8 -2" button="item_id: 4; item_name: Baking Soda;"></a-plane>
+      <a-plane mixin="menu-item" position=" 1.1 0.1 -2" button="item_id: 3; item_name: Honey;"></a-plane>
+      <a-plane mixin="menu-item" position="-1.1 0.1 -2" button="item_id: 4; item_name: Cocoa Powder;"></a-plane>
+      
+      <!-- ... add more ingredients as needed ... -->
+      <a-plane mixin="menu-item" position="-1.1 -0.6 -2" text="value: Finish Recipe; color: #000000" button="item_id: 7; color: #FFFF00; hover: #228852;" color="#FFFF00"></a-plane>
+      <a-plane mixin="menu-item" position=" 1.1 -0.6 -2" text="value: Clear Recipe; color: #000000" button="item_id: 8; color: #FFA500; hover: #D52E22;" color="#FFA500"></a-plane>
+    </a-entity>
+    
+    <a-plane id="info_box" position="1.3 1.7 -3" rotation="0 -20 0" width="2" height="2" color="#000000">
+      <a-text id="info_text" align="left" baseline="top" position="-0.8 0.8 0.05" scale="0.5 0.5 1.0" value="Your Recipe\n"></a-text>
+      <a-plane width="1.6" height="0.01" position="0 0.7 0.05" color="white"></a-plane>
+    </a-plane>
+  </a-scene>
+  
+</body>
+</html>
+                                                                      
